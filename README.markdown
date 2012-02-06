@@ -22,5 +22,5 @@ AUTHORS:
 
  * Scott Graham (@h4kr, http://h4ck3r.net/)
  * Xbox 360 Icon Pack by Jeff Jenkins (@sinnix, http://sinnix.net/downloads/?did=1)
- * ImpactJS and Linux modifications Dan Wolfe (http://danwolfe.net)
+ * ImpactJS and Linux modifications by Dan Wolfe (http://danwolfe.net)
 
