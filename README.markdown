@@ -18,7 +18,8 @@ TODO:
 * Fix button mappings for XBox 360 wired controller.
 * Add in Linux button mappings for Firefox and Chrome.
 
-Authors:
+AUTHORS:
+
  * Scott Graham (@h4kr, http://h4ck3r.net/)
  * Xbox 360 Icon Pack by Jeff Jenkins (@sinnix, http://sinnix.net/downloads/?did=1)
  * ImpactJS and Linux modifications Dan Wolfe (http://danwolfe.net)
