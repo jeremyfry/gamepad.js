@@ -1,5 +1,5 @@
 gamepad.js for ImpactJS
-=======================
+-----------------------
 
 This is a fork of gamepad.js for use as a plugin with ImpactJS.
 
