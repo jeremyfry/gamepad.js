@@ -68,6 +68,7 @@ ig.module(
     var userAgent = navigator.userAgent;
     var isWindows = contains(userAgent, 'Windows NT');
     var isMac = contains(userAgent, 'Macintosh');
+    var isLinux = contains(userAgent, 'Linux');
     var isChrome = contains(userAgent, 'Chrome/');
     var isFirefox = contains(userAgent, 'Firefox/');
 
@@ -353,5 +354,10 @@ Gamepad_ImageDataUrls_Xbox360.start = 'data:image/png;base64,iVBORw0KGgoAAAANSUh
     } else if (isFirefox && isMac) {
         active.push([ '45e-', '28e-', FirefoxMacXbox360Controller, "Xbox 360", Gamepad_ImageDataUrls_Xbox360 ]);
         active.push([ '54c-', '268-', FirefoxMacPS3Controller, "Playstation 3", Gamepad_ImageDataUrls_PS3 ]);
+    } else if (isChrome && isLinux) {
+    	
+    } else if (isFirefox && isLinux) {
+    	
     }
+    
 });
