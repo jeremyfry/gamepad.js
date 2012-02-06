@@ -257,7 +257,6 @@ ig.module(
         into.leftShoulder1 = axisToButton(raw.axes[4]);
         into.rightShoulder1 = axisToButton(raw.axes[5]);
     };
-
     var CommonMacPS3Controller = function(Raw, into, index) {
         // NOTE: Partial, doesn't set all values.
         into.leftStickX = raw.axes[0];
@@ -288,6 +287,47 @@ ig.module(
 
     var ChromeMacPS3Controller = function(raw, into, index) {
         into.rightStickY = raw.axes[5];
+    };
+    var CommonLinuxXbox360Controller = function(raw, into, index) {
+				// copied from Mac not updated yet.
+        // NOTE: Partial, doesn't set all values.
+        into.leftStickX = raw.axes[0];
+        into.leftStickY = raw.axes[1];
+        into.faceButton0 = raw.buttons[0];
+        into.faceButton1 = raw.buttons[1];
+        into.faceButton2 = raw.buttons[2];
+        into.faceButton3 = raw.buttons[3];
+        into.leftShoulder0 = raw.buttons[4];
+        into.rightShoulder0 = raw.buttons[5];
+        into.select = raw.buttons[9];
+        into.start = raw.buttons[8];
+        into.leftStickButton = raw.buttons[6];
+        into.rightStickButton = raw.buttons[7];
+        into.dpadUp = raw.buttons[11];
+        into.dpadDown = raw.buttons[12];
+        into.dpadLeft = raw.buttons[13];
+        into.dpadRight = raw.buttons[14];
+        // From http://msdn.microsoft.com/en-us/library/windows/desktop/ee417001(v=vs.85).aspx
+        into.deadZoneLeftStick = 7849.0/32767.0;
+        into.deadZoneRightStick = 8689/32767.0;
+        into.deadZoneShoulder0 = 0.5;
+        into.deadZoneShoulder1 = 30.0/255.0;
+    }
+    var ChromeLinuxXbox360Controller = function(raw, into, index) {
+    		// copied from Mac not updated yet.
+        CommonMacXbox360Controller(raw, into, index);
+        into.rightStickX = raw.axes[3];
+        into.rightStickY = raw.axes[4];
+        into.leftShoulder1 = axisToButton(raw.axes[2]);
+        into.rightShoulder1 = axisToButton(raw.axes[5]);
+    };
+    var FirefoxLinuxXbox360Controller = function(raw, into, index) {
+    		// copied from Mac not updated yet.
+        CommonMacXbox360Controller(raw, into, index);
+        into.rightStickX = raw.axes[2];
+        into.rightStickY = raw.axes[3];
+        into.leftShoulder1 = axisToButton(raw.axes[4]);
+        into.rightShoulder1 = axisToButton(raw.axes[5]);
     };
 
 
@@ -356,9 +396,10 @@ Gamepad_ImageDataUrls_Xbox360.start = 'data:image/png;base64,iVBORw0KGgoAAAANSUh
         active.push([ '54c-', '268-', FirefoxMacPS3Controller, "Playstation 3", Gamepad_ImageDataUrls_PS3 ]);
     } else if (isChrome && isLinux) {
     		console.log('Linux - Chrome');
-    	
+    	  active.push([ 'Vendor: 045e', 'Product: 028e', ChromeLinuxXbox360Controller, "Xbox 360", Gamepad_ImageDataUrls_Xbox360 ]);
     } else if (isFirefox && isLinux) {
     	console.log('Linux - Firefox');
+    	active.push([ '45e-', '28e-', FirefoxLinuxXbox360Controller, "Xbox 360", Gamepad_ImageDataUrls_Xbox360 ]);
     }
     
 });
