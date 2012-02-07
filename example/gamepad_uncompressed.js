@@ -1,13 +1,6 @@
-/*
-	gamepad.js, See README for copyright and usage instructions.
+/** @license gamepad.js, See README for copyright and usage instructions.
 */
-ig.module( 
-	'plugins.gamepad.gamepad' 
-)
-.requires(
-
-)
-.defines(function() {
+(function() {
     var getField = function() {
         return navigator.webkitGamepads || navigator.mozGamepads || navigator.gamepads;
     };
@@ -299,30 +292,28 @@ ig.module(
         into.faceButton3 = raw.buttons[3];
         into.leftShoulder0 = raw.buttons[4];
         into.rightShoulder0 = raw.buttons[5];
-        into.select = raw.buttons[9];
-        into.start = raw.buttons[8];
-        into.leftStickButton = raw.buttons[6];
-        into.rightStickButton = raw.buttons[7];
-        into.dpadUp = raw.buttons[11];
-        into.dpadDown = raw.buttons[12];
-        into.dpadLeft = raw.buttons[13];
-        into.dpadRight = raw.buttons[14];
+        into.select = raw.buttons[8];
+        into.start = raw.buttons[9];
+        into.leftStickButton = raw.buttons[10];
+        into.rightStickButton = raw.buttons[11];
+        into.dpadUp = raw.buttons[12];
+        into.dpadDown = raw.buttons[13];
+        into.dpadLeft = raw.buttons[14];
+        into.dpadRight = raw.buttons[15];
         // From http://msdn.microsoft.com/en-us/library/windows/desktop/ee417001(v=vs.85).aspx
         into.deadZoneLeftStick = 7849.0/32767.0;
-        into.deadZoneRightStick = 8689/32767.0;
+        into.deadZoneRightStick = 8689.0/32767.0;
         into.deadZoneShoulder0 = 0.5;
         into.deadZoneShoulder1 = 30.0/255.0;
     }
     var ChromeLinuxXbox360Controller = function(raw, into, index) {
-    		// copied from Mac not updated yet.
         CommonLinuxXbox360Controller(raw, into, index);
-        into.rightStickX = raw.axes[3];
-        into.rightStickY = raw.axes[4];
-        into.leftShoulder1 = axisToButton(raw.axes[2]);
-        into.rightShoulder1 = axisToButton(raw.axes[5]);
+        into.rightStickX = raw.axes[2];
+        into.rightStickY = raw.axes[3];
+        into.leftShoulder1 = raw.buttons[6];
+        into.rightShoulder1 = raw.buttons[7];
     };
     var FirefoxLinuxXbox360Controller = function(raw, into, index) {
-    		// copied from Mac not updated yet.
         CommonLinuxXbox360Controller(raw, into, index);
         into.rightStickX = raw.axes[2];
         into.rightStickY = raw.axes[3];
@@ -402,4 +393,4 @@ Gamepad_ImageDataUrls_Xbox360.start = 'data:image/png;base64,iVBORw0KGgoAAAANSUh
     	active.push([ '45e-', '28e-', FirefoxLinuxXbox360Controller, "Xbox 360", Gamepad_ImageDataUrls_Xbox360 ]);
     }
     
-});
+})();
