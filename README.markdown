@@ -13,10 +13,15 @@ You will need a browser which supports the Gamepad API:
  * Firefox Nightly w/Gamepad API support: http://people.mozilla.com/~tmielczarek/mouselock+gamepad/
  * Google Chrome (Most Dev or Canary builds), Gamepad API can be activated on the chrome://flags page: http://dev.chromium.org/getting-involved/dev-channel
 
+DIFFERENCES:
+
+* Fix button mappings for XBox 360 wired controller (on Linux).
+* Add in Linux button mappings for Chrome.
+
 TODO:
 
-* Fix button mappings for XBox 360 wired controller.
-* Add in Linux button mappings for Firefox and Chrome.
+* Fix button mappings for XBox 360 wired controller (on Mac).
+* Add in Linux button mappings for Firefox.
 
 AUTHORS:
 
