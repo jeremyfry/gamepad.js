@@ -401,4 +401,40 @@ Gamepad_ImageDataUrls_Xbox360.start = 'data:image/png;base64,iVBORw0KGgoAAAANSUh
     	active.push([ '45e-', '28e-', FirefoxLinuxXbox360Controller, "Xbox 360", Gamepad_ImageDataUrls_Xbox360 ]);
     }
     
-});
+},
+	ig.Gamepad = ig.Class.extend({
+
+		instance: null,
+
+  staticInstantiate: function( ignore ) {
+    if( ig.Gamepad.instance == null ) {
+      return null;
+    }
+    else {
+      throw("Error: ig.Gamepad has already been instantiated. It can only be instantiated once.");
+      return 	ig.Gamepad.instance;
+    }
+  },
+
+  init: function() {
+    //
+    console.log('created Gamepad instance');
+    
+    ig.Game.inject({
+      gamepadUpdate: function (){
+        var pads = Gamepad.getStates();
+        for (var i = 0; i < pads.length; ++i) {
+          if (pads[i]) {
+            console.log(i + " - Dpad: (" + pads[i].dpadUp + ", " + pads[i].dpadLeft + ", " + pads[i].dpadDown + ", " + pads[i].dpadRight + ")");
+            console.log(i + " - Face: (" + pads[i].faceButton0 + ", " + pads[i].faceButton1 + ", " + pads[i].faceButton2 + ", " + pads[i].faceButton3 + ")");
+          }
+        }
+      }
+    });
+    
+    ig.Entity.inject({
+      myEntityFunction: function (parmA, parmB){} 
+    });
+    ig.Gamepad.instance = this;
+  }
+  }));
