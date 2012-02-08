@@ -417,10 +417,10 @@ Gamepad_ImageDataUrls_Xbox360.start = 'data:image/png;base64,iVBORw0KGgoAAAANSUh
   },
 
   init: function() {
-    //
     console.log('created Gamepad instance');
     
     ig.Game.inject({
+      // dummy function outputs the state of the dpad and face buttons
       gamepadUpdate: function (){
         var pads = Gamepad.getStates();
         for (var i = 0; i < pads.length; ++i) {
@@ -432,8 +432,11 @@ Gamepad_ImageDataUrls_Xbox360.start = 'data:image/png;base64,iVBORw0KGgoAAAANSUh
       }
     });
     
-    ig.Entity.inject({
-      myEntityFunction: function (parmA, parmB){} 
+    ig.Input.inject({
+      bindGamepad: function (button, action){},
+      pressedGamepad: function (action){},
+      releasedGamepad: function (action){},
+      stateGamepad: function (action){}
     });
     ig.Gamepad.instance = this;
   }
