@@ -10,22 +10,25 @@ NOTES:
 
 You will need a browser which supports the Gamepad API:
 
- * Firefox Nightly w/Gamepad API support: http://people.mozilla.com/~tmielczarek/mouselock+gamepad/
  * Google Chrome (Most Dev or Canary builds), Gamepad API can be activated on the chrome://flags page: http://dev.chromium.org/getting-involved/dev-channel
 
-DIFFERENCES:
+EXAMPLE:
 
-* Fix button mappings for XBox 360 wired controller (on Linux).
-* Add in Linux button mappings for Chrome.
+Put the following in your main.js update loop:
 
-TODO:
-
-* Fix button mappings for XBox 360 wired controller (on Mac).
-* Add in Linux button mappings for Firefox.
-
+        var gamepad = new Gamepad.getState(0);		
+        var mappings = [[ gamepad.dpadUp, ig.KEY.UP_ARROW ],
+                        [ gamepad.dpadDown, ig.KEY.DOWN_ARROW ],
+                        [ gamepad.dpadLeft, ig.KEY.LEFT_ARROW ],
+                        [ gamepad.dpadRight, ig.KEY.RIGHT_ARROW ],
+                        [ gamepad.faceButton0, ig.KEY.X ],
+                        [ gamepad.faceButton1, ig.KEY.C ],
+                        [ gamepad.faceButton2, ig.KEY.Z ],
+                        [ gamepad.faceButton3, ig.KEY.V ]];
+        new Gamepad.magic(gamepad, mappings);
+        
 AUTHORS:
 
  * Scott Graham (@h4kr, http://h4ck3r.net/)
- * Xbox 360 Icon Pack by Jeff Jenkins (@sinnix, http://sinnix.net/downloads/?did=1)
  * ImpactJS and Linux modifications by Dan Wolfe (http://danwolfe.net)
 
