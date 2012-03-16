@@ -359,17 +359,6 @@ ig.module(
         for(m=0; m < mappings.length; m++){
           bindButtonToKey(pad, mappings[m][0], mappings[m][1]);
         }
-        // Directional Pad
-        //bindButtonToKey(i, pad.dpadUp, ig.KEY.UP_ARROW);
-        //bindButtonToKey(i, pad.dpadDown, ig.KEY.DOWN_ARROW);
-        //bindButtonToKey(i, pad.dpadLeft, ig.KEY.LEFT_ARROW);
-        //bindButtonToKey(i, pad.dpadRight, ig.KEY.RIGHT_ARROW);
-        
-        // Face Buttons (A,B,X,Y)
-        //bindButtonToKey(i, pad.faceButton0, ig.KEY.X);
-        //bindButtonToKey(i, pad.faceButton1, ig.KEY.C);
-        //bindButtonToKey(i, pad.faceButton2, ig.KEY.Z);
-        //bindButtonToKey(i, pad.faceButton3, ig.KEY.V);
       }  
     },
     bindButtonToKey = function(pad, myButton, myKey){
