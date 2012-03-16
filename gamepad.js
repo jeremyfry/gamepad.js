@@ -353,9 +353,33 @@ ig.module(
     	active.push([ '45e-', '28e-', FirefoxLinuxXbox360Controller, "Xbox 360" ]);
     }
     Gamepad.magic = function(i){
-        var pad = new Gamepad.getState(i);
-        if (pad.faceButton0) {console.log('trigger A action');}
-        else {console.log('cancel A action')}
+        var attachedGamepads = getField();
+        if (attachedGamepads[i]){
+          var pad = new Gamepad.getState(i);
+          if (pad.faceButton0) {
+            console.log('trigger A action');
+            if( document.createEvent ) {
+              console.log('createEvent');
+              var evObj = document.createEvent('Event');
+              evObj.initEvent( 'keydown', true, false );;
+              evObj.keyCode = ig.KEY.X;
+              window.dispatchEvent(evObj);
+            } else if( document.createEventObject ) {
+              console.log('createEventObject');
+            }
+          }
+          else {console.log('cancel A action')
+            if( document.createEvent ) {
+              console.log('createEvent');
+              var evObj = document.createEvent('Event');
+              evObj.initEvent( 'keyup', true, false );;
+              evObj.keyCode = ig.KEY.X;
+              window.dispatchEvent(evObj);
+            } else if( document.createEventObject ) {
+              console.log('createEventObject');
+            }
+          }
+        }
         
     }
 });
