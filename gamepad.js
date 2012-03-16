@@ -352,25 +352,27 @@ ig.module(
     	console.log('Linux - Firefox');
     	active.push([ '45e-', '28e-', FirefoxLinuxXbox360Controller, "Xbox 360" ]);
     }
-    Gamepad.magic = function(i){
+    Gamepad.magic = function(pad, mappings){
       var attachedGamepads = getField();
-      if (attachedGamepads[i]){
-        var pad = new Gamepad.getState(i);
-        
+      if (attachedGamepads[0] || attachedGamepads[1] || attachedGamepads[2] || attachedGamepads[3]){
+        //var pad = new Gamepad.getState(i);
+        for(m=0; m < mappings.length; m++){
+          bindButtonToKey(pad, mappings[m][0], mappings[m][1]);
+        }
         // Directional Pad
-        bindButtonToKey(i, pad.dpadUp, ig.KEY.UP_ARROW);
-        bindButtonToKey(i, pad.dpadDown, ig.KEY.DOWN_ARROW);
-        bindButtonToKey(i, pad.dpadLeft, ig.KEY.LEFT_ARROW);
-        bindButtonToKey(i, pad.dpadRight, ig.KEY.RIGHT_ARROW);
+        //bindButtonToKey(i, pad.dpadUp, ig.KEY.UP_ARROW);
+        //bindButtonToKey(i, pad.dpadDown, ig.KEY.DOWN_ARROW);
+        //bindButtonToKey(i, pad.dpadLeft, ig.KEY.LEFT_ARROW);
+        //bindButtonToKey(i, pad.dpadRight, ig.KEY.RIGHT_ARROW);
         
         // Face Buttons (A,B,X,Y)
-        bindButtonToKey(i, pad.faceButton0, ig.KEY.X);
-        bindButtonToKey(i, pad.faceButton1, ig.KEY.C);
-        bindButtonToKey(i, pad.faceButton2, ig.KEY.Z);
-        bindButtonToKey(i, pad.faceButton3, ig.KEY.V);
+        //bindButtonToKey(i, pad.faceButton0, ig.KEY.X);
+        //bindButtonToKey(i, pad.faceButton1, ig.KEY.C);
+        //bindButtonToKey(i, pad.faceButton2, ig.KEY.Z);
+        //bindButtonToKey(i, pad.faceButton3, ig.KEY.V);
       }  
     },
-    bindButtonToKey = function(i, myButton, myKey){
+    bindButtonToKey = function(pad, myButton, myKey){
         if (myButton) {
           if( document.createEvent ) {
             var evObj = document.createEvent('Event');
