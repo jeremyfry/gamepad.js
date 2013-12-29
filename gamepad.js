@@ -9,8 +9,15 @@ ig.module(
 )
 .defines(function() {
     var getField = function() {
-        return navigator.webkitGamepads || navigator.mozGamepads || navigator.gamepads ||
-        navigator.webkitGetGamepads() || navigator.mozGetGamepads() || navigator.getGamepads();
+        try
+        {
+            return navigator.webkitGamepads || navigator.mozGamepads || navigator.gamepads
+            || navigator.webkitGetGamepads() || navigator.mozGetGamepads() || navigator.getGamepads();
+        }
+        catch (e)
+        {
+            return {};
+        }
     };
 
     var Item = function() {
