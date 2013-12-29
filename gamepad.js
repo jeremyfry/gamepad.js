@@ -1,15 +1,16 @@
 /*
-	gamepad.js, See README for copyright and usage instructions.
+ * gamepad.js, See README for copyright and usage instructions.
 */
-ig.module( 
-	'plugins.gamepad.gamepad' 
+ig.module(
+	'plugins.gamepad.gamepad'
 )
 .requires(
 
 )
 .defines(function() {
     var getField = function() {
-        return navigator.webkitGamepads || navigator.mozGamepads || navigator.gamepads;
+        return navigator.webkitGamepads || navigator.mozGamepads || navigator.gamepads ||
+        navigator.webkitGetGamepads() || navigator.mozGetGamepads() || navigator.getGamepads();
     };
 
     var Item = function() {
@@ -92,8 +93,10 @@ ig.module(
 
     var mapPad = function(raw, mapped) {
         var len = active.length;
-        for (var i = 0; i < len; ++i) {
+        for (var i = 0; i < len; ++i)
+        {
             var entry = active[i];
+            if (typeof(entry) == "undefined") return;
             var ss1 = entry[0];
             var ss2 = entry[1];
             if (contains(raw.id, ss1) && contains(raw.id, ss2)) {
@@ -101,14 +104,16 @@ ig.module(
                 handler(raw, mapped);
                 var deviceident = entry[3];
                 mapped.name = deviceident + " Player " + (raw.index + 1);
-                mapped.images = entry[4];
                 // todo; apply dead zones to mapped here
                 return;
             }
         }
-        mapped.name = "Unknown: " + raw.id;
-        console.warn("Unrecognized pad type, not being mapped!");
-        console.warn(raw.id);
+        var entry = active[0];
+        if (typeof(entry) == "undefined") return;
+        var handler = entry[2];
+        handler(raw, mapped);
+        var deviceident = entry[3];
+        mapped.name = deviceident + " Player " + (raw.index + 1);
     };
 
     var mapIndividualPad = function(rawPads, i) {
@@ -243,6 +248,7 @@ ig.module(
         into.deadZoneShoulder0 = 0.5;
         into.deadZoneShoulder1 = 30.0/255.0;
     }
+
     var ChromeMacXbox360Controller = function(raw, into, index) {
         CommonMacXbox360Controller(raw, into, index);
         into.rightStickX = raw.axes[3];
@@ -250,6 +256,40 @@ ig.module(
         into.leftShoulder1 = axisToButton(raw.axes[2]);
         into.rightShoulder1 = axisToButton(raw.axes[5]);
     };
+
+    var ChromeMacLogitechF310Controller = function(raw, into, index) {
+        into.leftStickX = raw.axes[0];
+        into.leftStickY = raw.axes[1];
+        into.faceButton0 = raw.buttons[1];
+        into.faceButton1 = raw.buttons[2];
+        into.faceButton2 = raw.buttons[0];
+        into.faceButton3 = raw.buttons[3];
+        into.leftShoulder0 = raw.buttons[4];
+        into.rightShoulder0 = raw.buttons[5];
+        into.select = raw.buttons[8];
+        into.start = raw.buttons[9];
+        into.leftStickButton = raw.buttons[10];
+        into.rightStickButton = raw.buttons[11];
+
+        // There is a switch to toggle the left joystick and dpad
+        // only one is enabled at a time and the output always goes
+        // through the left joystick
+        into.dpadUp =  0;
+        into.dpadDown = 0;
+        into.dpadLeft = 0;
+        into.dpadRight = 0;
+
+        into.deadZoneLeftStick = 7849.0/32767.0;
+        into.deadZoneRightStick = 8689/32767.0;
+        into.deadZoneShoulder0 = 0.5;
+        into.deadZoneShoulder1 = 30.0/255.0;
+        console.log(raw.axes);
+        into.rightStickX = raw.axes[2];
+        into.rightStickY = raw.axes[5];
+        into.leftShoulder1 = raw.buttons[6];
+        into.rightShoulder1 = raw.buttons[7];
+    };
+
     var FirefoxMacXbox360Controller = function(raw, into, index) {
         CommonMacXbox360Controller(raw, into, index);
         into.rightStickX = raw.axes[2];
@@ -257,6 +297,7 @@ ig.module(
         into.leftShoulder1 = axisToButton(raw.axes[4]);
         into.rightShoulder1 = axisToButton(raw.axes[5]);
     };
+
     var CommonMacPS3Controller = function(Raw, into, index) {
         // NOTE: Partial, doesn't set all values.
         into.leftStickX = raw.axes[0];
@@ -288,8 +329,37 @@ ig.module(
     var ChromeMacPS3Controller = function(raw, into, index) {
         into.rightStickY = raw.axes[5];
     };
-  var CommonLinuxXbox360Controller = function(raw, into, index) {
-				// copied from Mac not updated yet.
+
+    var ChromeGenericController = function(raw, into, index) {
+        into.leftStickX = raw.axes[0];
+        into.leftStickY = raw.axes[1];
+        into.rightStickX = raw.axes[3];
+        into.rightStickY = raw.axes[2];
+        into.faceButton0 = raw.buttons[0];
+        into.faceButton1 = raw.buttons[1];
+        into.faceButton2 = raw.buttons[2];
+        into.faceButton3 = raw.buttons[3];
+        into.leftShoulder0 = raw.buttons[4];
+        into.rightShoulder0 = raw.buttons[5];
+        into.leftShoulder1 = raw.buttons[7];
+        into.rightShoulder1 = raw.buttons[6];
+        into.select = raw.buttons[8];
+        into.start = raw.buttons[9];
+        into.leftStickButton = raw.buttons[10];
+        into.rightStickButton = raw.buttons[11];
+        into.dpadUp = raw.axes[5] < -0.5 ? 1 : 0;
+        into.dpadDown = raw.axes[5] > 0.5 ? 1 : 0;
+        into.dpadLeft = raw.axes[4] < -0.5 ? 1 : 0;
+        into.dpadRight = raw.axes[4] > 0.5 ? 1 : 0;
+        // From http://msdn.microsoft.com/en-us/library/windows/desktop/ee417001(v=vs.85).aspx
+        into.deadZoneLeftStick = 7849.0/32767.0;
+        into.deadZoneRightStick = 8689/32767.0;
+        into.deadZoneShoulder0 = 0.5;
+        into.deadZoneShoulder1 = 30.0/255.0;
+    };
+
+    var CommonLinuxXbox360Controller = function(raw, into, index) {
+        // copied from Mac not updated yet.
         // NOTE: Partial, doesn't set all values.
         into.leftStickX = raw.axes[0];
         into.leftStickY = raw.axes[1];
@@ -332,55 +402,93 @@ ig.module(
     // todo; possible we need to add different deadzones based on controller
     //       manufacturer, but perhaps they're fairly close anyway.
     if (isChrome && isWindows) {
-        active.push([ 'XInput ', 'GAMEPAD', ChromeWindowsXinputGamepad, "Xbox 360", ]);
+        active.push([ 'Vendor: Unknown', 'Product: Unknown', ChromeGenericController, "Generic Controller" ]);
+        active.push([ 'XInput ', 'GAMEPAD', ChromeWindowsXinputGamepad, "Xbox 360" ]);
     } else if (isChrome && isMac) {
+        active.push([ 'Vendor: Unknown', 'Product: Unknown', ChromeGenericController, "Generic Controller" ]);
         active.push([ 'Vendor: 045e', 'Product: 028e', ChromeMacXbox360Controller, "Xbox 360" ]);
         active.push([ 'Vendor: 045e', 'Product: 02a1', ChromeMacXbox360Controller, "Xbox 360" ]);
         active.push([ 'Vendor: 054c', 'Product: 0268', ChromeMacPS3Controller, "Playstation 3" ]);
+        active.push([ 'Vendor: 046d', 'Product: c216', ChromeMacLogitechF310Controller, "Logitech F310" ]);
     } else if (isFirefox && isWindows) {
+        active.push([ 'Vendor: Unknown', 'Product: Unknown', ChromeGenericController, "Generic Controller" ]);
         active.push([ '45e-', '28e-', FirefoxWindowsXbox360Controller, "Xbox 360" ]);
-        active.push([ '45e-', '2a1-', FirefoxWindowsXbox360Controller, "Xbox 360"]);
+        active.push([ '45e-', '2a1-', FirefoxWindowsXbox360Controller, "Xbox 360" ]);
         active.push([ '46d-', 'c21d-', FirefoxWindowsXbox360Controller, "Logitech F310" ]);
         active.push([ '46d-', 'c21e-', FirefoxWindowsXbox360Controller, "Logitech F510" ]);
     } else if (isFirefox && isMac) {
+        active.push([ 'Vendor: Unknown', 'Product: Unknown', ChromeGenericController, "Generic Controller" ]);
         active.push([ '45e-', '28e-', FirefoxMacXbox360Controller, "Xbox 360" ]);
         active.push([ '54c-', '268-', FirefoxMacPS3Controller, "Playstation 3" ]);
     } else if (isChrome && isLinux) {
-    		console.log('Linux - Chrome');
-    	  active.push([ 'Vendor: 045e', 'Product: 028e', ChromeLinuxXbox360Controller, "Xbox 360"]);
+        console.log('Linux - Chrome');
+        active.push([ 'Vendor: 045e', 'Product: 028e', ChromeLinuxXbox360Controller, "Xbox 360"]);
     } else if (isFirefox && isLinux) {
-    	console.log('Linux - Firefox');
-    	active.push([ '45e-', '28e-', FirefoxLinuxXbox360Controller, "Xbox 360" ]);
+        console.log('Linux - Firefox');
+        active.push([ '45e-', '28e-', FirefoxLinuxXbox360Controller, "Xbox 360" ]);
     }
-    Gamepad.magic = function(pad, mappings){
-      var attachedGamepads = getField();
-      if (attachedGamepads[0] || attachedGamepads[1] || attachedGamepads[2] || attachedGamepads[3]){
-        //var pad = new Gamepad.getState(i);
-        for(m=0; m < mappings.length; m++){
-          bindButtonToKey(pad, mappings[m][0], mappings[m][1]);
+
+
+    var activeButtonActions = [];
+    var activeAxisActions = [];
+    Gamepad.magic = function(pad, mappings)
+    {
+        var attachedGamepads = getField();
+        if (attachedGamepads[0] || attachedGamepads[1] || attachedGamepads[2] || attachedGamepads[3]){
+
+            for(m=0; m < mappings.length; m++)
+            {
+                if (typeof(mappings[m][2]) == "undefined")
+                {
+                    bindButtonToKey(pad, mappings[m][0], mappings[m][1]);
+                }
+            }
+            for(m=0; m < mappings.length; m++)
+            {
+                if (typeof(mappings[m][2]) != "undefined")
+                {
+                    bindAxisToKey(pad, mappings[m][0], mappings[m][1], mappings[m][2]);
+                }
+            }
         }
-      }  
-    },
-    bindButtonToKey = function(pad, myButton, myKey){
-        if (myButton) {
-          if( document.createEvent ) {
-            var evObj = document.createEvent('Event');
-            evObj.initEvent( 'keydown', true, false );;
-            evObj.keyCode = myKey;
-            window.dispatchEvent(evObj);
-          } else if( document.createEventObject ) {
-            console.log('createEventObject');
-          }
+    }
+
+    bindButtonToKey = function(pad, myButton, myAction)
+    {
+        if (activeButtonActions[myAction] && myButton == 0 && !ig.input.pressed(myAction))
+        {
+            if (!activeAxisActions[myAction]) ig.input.actions[myAction] = false;
+            activeButtonActions[myAction] = false;
         }
-        else {
-          if( document.createEvent ) {;
-            var evObj = document.createEvent('Event');
-            evObj.initEvent( 'keyup', true, false );;
-            evObj.keyCode = myKey;
-            window.dispatchEvent(evObj);
-          } else if( document.createEventObject ) {
-            console.log('createEventObject');
-          }
+        else if (myButton == 1)
+        {
+            ig.input.actions[myAction] = true;
+            activeButtonActions[myAction] = true;
+        }
+    }
+
+    bindAxisToKey = function(pad, myAxis, myNegAction, myPosAction)
+    {
+        if (activeAxisActions[myNegAction] && myAxis >= -0.7 && !ig.input.pressed(myNegAction))
+        {
+            if (!activeButtonActions[myNegAction]) ig.input.actions[myNegAction] = false;
+            activeAxisActions[myNegAction] = false;
+        }
+        else if (myAxis < -0.7)
+        {
+            ig.input.actions[myNegAction] = true;
+            activeAxisActions[myNegAction] = true;
+        }
+
+        if (activeAxisActions[myPosAction] && myAxis <= 0.7 && !ig.input.pressed(myPosAction))
+        {
+            if (!activeButtonActions[myPosAction]) ig.input.actions[myPosAction] = false;
+            activeAxisActions[myPosAction] = false;
+        }
+        else if (myAxis > 0.7)
+        {
+            ig.input.actions[myPosAction] = true;
+            activeAxisActions[myPosAction] = true;
         }
     }
 });
