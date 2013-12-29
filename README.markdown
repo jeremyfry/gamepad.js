@@ -10,25 +10,31 @@ NOTES:
 
 You will need a browser which supports the Gamepad API:
 
- * Google Chrome (Most Dev or Canary builds), Gamepad API can be activated on the chrome://flags page: http://dev.chromium.org/getting-involved/dev-channel
-
 EXAMPLE:
 
 Put the following in your main.js update loop:
 
-        var gamepad = new Gamepad.getState(0);		
-        var mappings = [[ gamepad.dpadUp, ig.KEY.UP_ARROW ],
-                        [ gamepad.dpadDown, ig.KEY.DOWN_ARROW ],
-                        [ gamepad.dpadLeft, ig.KEY.LEFT_ARROW ],
-                        [ gamepad.dpadRight, ig.KEY.RIGHT_ARROW ],
-                        [ gamepad.faceButton0, ig.KEY.X ],
-                        [ gamepad.faceButton1, ig.KEY.C ],
-                        [ gamepad.faceButton2, ig.KEY.Z ],
-                        [ gamepad.faceButton3, ig.KEY.V ]];
-        new Gamepad.magic(gamepad, mappings);
+        var gamepads = new Gamepad.getStates();
+        if (gamepads.length > 0 && typeof(gamepads[0]) != "undefined" )
+        {
+            ig.gamepad = gamepads[0];
+            var mappings = [
+            [ ig.gamepad.dpadUp, 'up' ],
+            [ ig.gamepad.dpadDown, 'down' ],
+            [ ig.gamepad.dpadLeft, 'left' ],
+            [ ig.gamepad.dpadRight, 'right' ],
+            [ ig.gamepad.leftStickX, 'left', 'right' ],
+            [ ig.gamepad.leftStickY, 'up', 'down' ],
+            [ ig.gamepad.faceButton0, 'action1' ],
+            [ ig.gamepad.faceButton1, 'action2' ],
+            [ ig.gamepad.faceButton2, 'action3' ],
+            [ ig.gamepad.faceButton3, 'action4' ]
+            ];
+            new Gamepad.magic(ig.gamepad, mappings);
+        }
         
 AUTHORS:
 
  * Scott Graham (@h4kr, http://h4ck3r.net/)
  * ImpactJS and Linux modifications by Dan Wolfe (http://danwolfe.net)
-
+ * "Map to Action not Keys" fork by Samuel Sarette
