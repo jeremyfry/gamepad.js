@@ -1,19 +1,5 @@
 /*
 gamepad.js, See README for copyright and usage instructions.
-
-Gamepad.mappings.one = [
-    [ 'dpadUp', 'up' ],
-    [ 'dpadDown', 'down' ],
-    [ 'dpadLeft', 'left' ],
-    [ 'dpadRight', 'right' ],
-    [ 'leftStickX', 'left', 'right' ],
-    [ 'leftStickY', 'up', 'down' ],
-    [ 'faceButton0, 'action1' ],
-    [ 'faceButton1', 'action2' ],
-    [ 'faceButton2, 'action3' ],
-    [ 'faceButton3', 'action4' ]
-];
-Gamepad.handleInput();
 }
 */
 ig.module(
