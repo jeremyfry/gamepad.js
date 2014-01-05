@@ -497,16 +497,19 @@ ig.module(
         {
             if (!activeAxisActions[action])
             {
-                ig.input.actions[action] = false;
+                ig.input.delayedKeyup[action] = true;
             }
             activeButtonActions[action] = false;
         }
         else if (myButton == 1)
         {
             ig.input.actions[action] = true;
-            ig.input.presses[action] = true;
-            ig.input.delayedKeyup[action] = true;
-            activeButtonActions[action] = true;
+            if( !ig.input.locks[action])
+            {
+                ig.input.presses[action] = true;
+                ig.input.locks[action] = true;
+                activeButtonActions[action] = true;
+            }
         }
     }
 
@@ -514,28 +517,40 @@ ig.module(
     {
         if (activeAxisActions[negativeAction] && myAxis >= -0.7 && !ig.input.pressed(negativeAction))
         {
-            if (!activeButtonActions[negativeAction]) ig.input.actions[negativeAction] = false;
+            if (!activeButtonActions[negativeAction])
+            {
+                ig.input.delayedKeyup[negativeAction] = true;
+            }
             activeAxisActions[negativeAction] = false;
         }
         else if (myAxis < -0.7)
         {
             ig.input.actions[negativeAction] = true;
-            ig.input.presses[negativeAction] = true;
-            ig.input.delayedKeyup[negativeAction] = true;
+            if( !ig.input.locks[negativeAction] )
+            {
+                ig.input.presses[negativeAction] = true;
+                ig.input.locks[negativeAction] = true;
+            }
             activeAxisActions[negativeAction] = true;
         }
 
         if (activeAxisActions[positiveAction] && myAxis <= 0.7 && !ig.input.pressed(positiveAction))
         {
-            if (!activeButtonActions[positiveAction]) ig.input.actions[positiveAction] = false;
+            if (!activeButtonActions[positiveAction])
+            {
+                ig.input.delayedKeyup[positiveAction] = true;
+            }
             activeAxisActions[positiveAction] = false;
         }
         else if (myAxis > 0.7)
         {
             ig.input.actions[positiveAction] = true;
-            ig.input.presses[positiveAction] = true;
-            ig.input.delayedKeyup[positiveAction] = true;
-            activeAxisActions[positiveAction] = true;
+            if( !ig.input.locks[positiveAction] )
+            {
+                ig.input.presses[positiveAction] = true;
+                ig.input.locks[positiveAction] = true;
+                activeAxisActions[positiveAction] = true;
+            }
         }
     }
 });
