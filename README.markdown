@@ -31,6 +31,14 @@ And the following in your main.js update loop:
 
         Gamepad.handleInput();
         
+If you're using Impact++, you have to override your handleInput instead:
+
+        handleInput: function ()
+        {
+                this.parent();
+                Gamepad.handleInput();
+        }
+
 AUTHORS:
 
  * Scott Graham (@h4kr, http://h4ck3r.net/)
