@@ -1,13 +1,14 @@
 /*
- * gamepad.js, See README for copyright and usage instructions.
+gamepad.js, See README for copyright and usage instructions.
+}
 */
 ig.module(
 	'plugins.gamepad.gamepad'
 )
 .requires(
-
 )
 .defines(function() {
+
     var getField = function() {
         try
         {
@@ -144,6 +145,13 @@ ig.module(
     window.Gamepad = Gamepad;
     Gamepad.getPreviousStates = function() {
         return prevData;
+    };
+    Gamepad.mappings = Gamepad.mappings ||
+    {
+        one: [],
+        two: [],
+        three: [],
+        four: []
     };
     Gamepad.getStates = function() {
         var rawPads = getField()
@@ -438,33 +446,57 @@ ig.module(
 
     var activeButtonActions = [];
     var activeAxisActions = [];
-    Gamepad.magic = function(pad, mappings)
+    Gamepad.handleInput = function()
     {
-        var attachedGamepads = getField();
-        if (attachedGamepads[0] || attachedGamepads[1] || attachedGamepads[2] || attachedGamepads[3]){
+        var gamepads = Gamepad.getStates();
+
+        for (var n = 0; n < gamepads.length; n++)
+        {
+            pad = gamepads[n];
+            var mappings;
+            switch (n)
+            {
+                case 0:
+                    mappings = Gamepad.mappings.one;
+                    break;
+                case 1:
+                    mappings = Gamepad.mappings.two;
+                    break;
+                case 2:
+                    mappings = Gamepad.mappings.three;
+                    break;
+                case 3:
+                    mappings = Gamepad.mappings.four;
+                    break;
+            }
+
+            if (typeof(pad) == "undefined" || typeof(mappings) == "undefined") continue;
 
             for(m=0; m < mappings.length; m++)
             {
-                if (typeof(mappings[m][2]) == "undefined")
+                if (typeof(mappings[m][2]) == "undefined") // if no second action, it's a button
                 {
-                    bindButtonToKey(pad, mappings[m][0], mappings[m][1]);
+                    bindButtonToAction(pad[mappings[m][0]], mappings[m][1]);
                 }
             }
             for(m=0; m < mappings.length; m++)
             {
-                if (typeof(mappings[m][2]) != "undefined")
+                if (typeof(mappings[m][2]) != "undefined") // if two actions, it's an axis
                 {
-                    bindAxisToKey(pad, mappings[m][0], mappings[m][1], mappings[m][2]);
+                    bindAxisToAction(pad[mappings[m][0]], mappings[m][1], mappings[m][2]);
                 }
             }
         }
     }
 
-    bindButtonToKey = function(pad, myButton, myAction)
+    bindButtonToAction = function(myButton, myAction)
     {
         if (activeButtonActions[myAction] && myButton == 0 && !ig.input.pressed(myAction))
         {
-            if (!activeAxisActions[myAction]) ig.input.actions[myAction] = false;
+            if (!activeAxisActions[myAction])
+            {
+                ig.input.actions[myAction] = false;
+            }
             activeButtonActions[myAction] = false;
         }
         else if (myButton == 1)
@@ -474,7 +506,7 @@ ig.module(
         }
     }
 
-    bindAxisToKey = function(pad, myAxis, myNegAction, myPosAction)
+    bindAxisToAction = function(myAxis, myNegAction, myPosAction)
     {
         if (activeAxisActions[myNegAction] && myAxis >= -0.7 && !ig.input.pressed(myNegAction))
         {
