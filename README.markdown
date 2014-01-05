@@ -30,7 +30,11 @@ Put the following in your main.js init:
 
 And the following in your main.js update loop:
 
-        Gamepad.handleInput();
+        update: function()
+        {
+                Gamepad.handleInput();
+                this.parent();
+        }
         
 ###Impact++ Users
 
