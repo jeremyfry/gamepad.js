@@ -12,29 +12,27 @@ You will need a browser which supports the Gamepad API:
 
 EXAMPLE:
 
-Put the following in your main.js update loop:
+Put the following in your main.js init:
 
-        var gamepads = new Gamepad.getStates();
-        if (gamepads.length > 0 && typeof(gamepads[0]) != "undefined" )
-        {
-            ig.gamepad = gamepads[0];
-            var mappings = [
-            [ ig.gamepad.dpadUp, 'up' ],
-            [ ig.gamepad.dpadDown, 'down' ],
-            [ ig.gamepad.dpadLeft, 'left' ],
-            [ ig.gamepad.dpadRight, 'right' ],
-            [ ig.gamepad.leftStickX, 'left', 'right' ],
-            [ ig.gamepad.leftStickY, 'up', 'down' ],
-            [ ig.gamepad.faceButton0, 'action1' ],
-            [ ig.gamepad.faceButton1, 'action2' ],
-            [ ig.gamepad.faceButton2, 'action3' ],
-            [ ig.gamepad.faceButton3, 'action4' ]
-            ];
-            new Gamepad.magic(ig.gamepad, mappings);
-        }
+        Gamepad.mappings.one = [
+            [ 'dpadUp', 'up' ],
+            [ 'dpadDown', 'down' ],
+            [ 'dpadLeft', 'left' ],
+            [ 'dpadRight', 'right' ],
+            [ 'leftStickX', 'left', 'right' ],
+            [ 'leftStickY', 'up', 'down' ],
+            [ 'faceButton0, 'action1' ],
+            [ 'faceButton1', 'action2' ],
+            [ 'faceButton2, 'action3' ],
+            [ 'faceButton3', 'action4' ]
+        ];
+
+And the following in your main.js update loop:
+
+        Gamepad.handleInput();
         
 AUTHORS:
 
  * Scott Graham (@h4kr, http://h4ck3r.net/)
  * ImpactJS and Linux modifications by Dan Wolfe (http://danwolfe.net)
- * "Map to Action not Keys" fork by Samuel Sarette
+ * Simpler usage modifications by Samuel Sarette
