@@ -1,5 +1,19 @@
 /*
 gamepad.js, See README for copyright and usage instructions.
+
+Gamepad.mappings.one = [
+    [ 'dpadUp', 'up' ],
+    [ 'dpadDown', 'down' ],
+    [ 'dpadLeft', 'left' ],
+    [ 'dpadRight', 'right' ],
+    [ 'leftStickX', 'left', 'right' ],
+    [ 'leftStickY', 'up', 'down' ],
+    [ 'faceButton0, 'action1' ],
+    [ 'faceButton1', 'action2' ],
+    [ 'faceButton2, 'action3' ],
+    [ 'faceButton3', 'action4' ]
+];
+Gamepad.handleInput();
 }
 */
 ig.module(
@@ -151,7 +165,8 @@ ig.module(
         one: [],
         two: [],
         three: [],
-        four: []
+        four: [],
+        active: true
     };
     Gamepad.getStates = function() {
         var rawPads = getField()
@@ -448,6 +463,7 @@ ig.module(
     var activeAxisActions = [];
     Gamepad.handleInput = function()
     {
+        if (Gamepad.mappings.active == false) return;
         var gamepads = Gamepad.getStates();
 
         for (var n = 0; n < gamepads.length; n++)
