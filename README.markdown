@@ -22,9 +22,9 @@ Put the following in your main.js init:
             [ 'dpadRight', 'right' ],
             [ 'leftStickX', 'left', 'right' ],
             [ 'leftStickY', 'up', 'down' ],
-            [ 'faceButton0, 'action1' ],
+            [ 'faceButton0', 'action1' ],
             [ 'faceButton1', 'action2' ],
-            [ 'faceButton2, 'action3' ],
+            [ 'faceButton2', 'action3' ],
             [ 'faceButton3', 'action4' ]
         ];
 
@@ -38,7 +38,7 @@ And the following in your main.js update loop:
         
 ###Impact++ Users
 
-you have to override your handleInput instead:
+You have to include your mappings as above, however you should override your games handleInput instead of modifying the update loop:
 
         inputStart: function ()
         {
